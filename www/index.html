@@ -25,22 +25,22 @@
 
     <ion-pane>
       <ion-header-bar class="bar-stable">
-        <h1 class="title">Ionic Blank Starter</h1>
+        <h1 class="title">gameReviews</h1>
       </ion-header-bar>
       <ion-content>
 
         <div ng-controller="MyController">
-          <button ng-click="myData.doClick(item, $event)">Send Ajax Request</button>
-          <ul>
-            <li ng-repeat="x in review">
+          <button ng-click="myData.doClick(item, $event)">Ajax</button>
+          <div class="card" ng-repeat="x in review">
+            <div class="item item-text-wrap">
+              {{x.game.name}}
+              <br><br>
               {{x.deck}}
-            </li>
-          </ul>
+              <br><br>
+              {{x.publish_date}}
+            </div>
+          </div>
         </div>
-
-        
-        
-
 
       </ion-content>
     </ion-pane>

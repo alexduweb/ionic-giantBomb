@@ -26,7 +26,6 @@ angular.module('starter', ['ionic'])
     var responsePromise = $http.get("http://www.giantbomb.com/api/reviews/?api_key=836e68b410df00e6d87b2cb43a5afb2a589026c0&format=json&limit=5");
 
     responsePromise.success(function(data, status, headers, config) {
-      alert("Ajax !");
       $scope.review = data.results;
     });
 
