@@ -28,7 +28,7 @@ angular.module('starter', ['ionic'])
         controller: 'ListCtrl'
       })
       .state('view', {
-        url: '/review/:reviewid',
+        url: '/review/:reviewId',
         templateUrl: 'view.html',
         controller: 'ViewCtrl'
       })
@@ -44,16 +44,30 @@ angular.module('starter', ['ionic'])
 .factory('ReviewService', ['$http',function($http) {
   
     var review = [];
+
     return {
 
       GetReview: function() {
 
-        return $http.get("http://www.giantbomb.com/api/reviews/?api_key=836e68b410df00e6d87b2cb43a5afb2a589026c0&format=json&limit=5").then(function(response) {
+        return $http.jsonp("http://www.giantbomb.com/api/reviews/?api_key=836e68b410df00e6d87b2cb43a5afb2a589026c0&format=jsonp&limit=5&json_callback=JSON_CALLBACK").then(function(response) {
 
-          review = response;
-          return response;
-          console.log(response);
+          review = response.data.results;
+          return response.data.results;
         });
+      },
+
+      GetOneReview: function(reviewId) {
+          
+        for(i=0; i<review.length; i++) {
+
+          console.log(review[i]);
+
+          if(review[i].release.id == reviewId) {
+
+              
+             return review[i];
+          }
+        }
       }
     }
   }
@@ -62,10 +76,9 @@ angular.module('starter', ['ionic'])
 
 // Controller qui liste dans la homepage les reviews
 
-.controller('ListCtrl', ['ReviewService',function($scope, ReviewService) {
+.controller('ListCtrl', ['$scope', 'ReviewService', function($scope, ReviewService) {
 
       ReviewService.GetReview().then(function(review) {
-         
           $scope.review = review;
       });
   }
@@ -73,8 +86,11 @@ angular.module('starter', ['ionic'])
 
 // Controller qui affiche le contenu de la review
 
-.controller('ViewCtrl', function($scope, $http, data) {
+.controller('ViewCtrl', ['$scope','$stateParams','ReviewService', function($scope, $stateParams, ReviewService) {
 
-  
-})
+
+      var reviewId = $stateParams.reviewId;
+      $scope.reviewId = ReviewService.GetOneReview(reviewId);
+  }
+])
 

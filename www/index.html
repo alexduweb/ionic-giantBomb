@@ -34,8 +34,6 @@
   <script id="list.html" type="text/ng-template">
     <ion-view view-title="List of Reviews">
       <ion-content>
-        <div ng-controller="ListCtrl">
-          <button ng-click="myData.doClick(item, $event)">Ajax</button>
           <ion-list>
             <div class="list">
               <a ng-repeat="x in review" href="#/review/{{x.release.id}}" class="item item-thumbnail-left">
@@ -47,7 +45,6 @@
               </a>
             </div>
           </ion-list>
-        </div>
       </ion-content>
     </ion-view>
   </script>
@@ -56,11 +53,10 @@
   <script id="view.html" type="text/ng-template">
     <ion-view view-title="Review Details">
       <ion-content>
-        <div ng-controller="ViewCtrl">
         <div class="list card">
           <div class="item item-avatar">
-            <h2>{{review.game.name}}</h2>
-            <p>{{review.publish_date}}</p>
+            <h2>{{reviewId.game.name}}</h2>
+            <p>{{reviewId.publish_date}}</p>
           </div>
 
           <div class="item item-image">
@@ -68,9 +64,8 @@
           </div>
 
           <a class="item" href="#">
-            Average vote: <strong>{{review.score}}/5</strong>
+            Average vote: <strong>{{reviewId.score}}/5</strong>
           </a>
-        </div>
       </ion-content>
     <ion-view>
   </script>
