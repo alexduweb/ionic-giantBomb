@@ -41,49 +41,40 @@ angular.module('starter', ['ionic'])
 
 // Service qui restransmet le json dans les deux controllers
 
-.factory('Reviews', function($http) {
+.factory('ReviewService', ['$http',function($http) {
+  
+    var review = [];
+    return {
 
-  var cachedData;
+      GetReview: function() {
 
-    function getData(reviewData, callback) {
+        return $http.get("http://www.giantbomb.com/api/reviews/?api_key=836e68b410df00e6d87b2cb43a5afb2a589026c0&format=json&limit=5").then(function(response) {
 
-      $http.get("http://www.giantbomb.com/api/reviews/?api_key=836e68b410df00e6d87b2cb43a5afb2a589026c0&format=json&limit=5").success(function(data){
-
-        cachedData = data.results;
-        callback(data.results);
-      });
+          review = response;
+          return response;
+          console.log(response);
+        });
+      }
     }
-})
+  }
+])
 
 
 // Controller qui liste dans la homepage les reviews
 
-.controller('ListCtrl', function($scope, $http) {
-  
-  $scope.myData = {};
-  $scope.myData.doClick = function(item, event) {
+.controller('ListCtrl', ['ReviewService',function($scope, ReviewService) {
 
-    var responsePromise = $http.get("http://www.giantbomb.com/api/reviews/?api_key=836e68b410df00e6d87b2cb43a5afb2a589026c0&format=json&limit=5");
-
-    responsePromise.success(function(data, status, headers, config) {
-      $scope.review = data.results;
-    });
-
-    responsePromise.error(function(data, status, headers, config) {
-      alert("AJAX failed!");
-    });
+      ReviewService.GetReview().then(function(review) {
+         
+          $scope.review = review;
+      });
   }
-})
+])
 
 // Controller qui affiche le contenu de la review
 
 .controller('ViewCtrl', function($scope, $http, data) {
 
-  var url = data,
-    config = "?api_key=836e68b410df00e6d87b2cb43a5afb2a589026c0&format=json";
-
-    $http.get(url + config).success(function(data) {
-        $scope.review = data.results;
-    });
+  
 })
 
