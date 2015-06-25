@@ -19,8 +19,48 @@ angular.module('starter', ['ionic'])
   });
 })
 
-.controller("MyController", function($scope, $http){
-    $scope.myData = {};
+.config(function($stateProvider, $urlRouterProvider) {
+
+    $stateProvider
+      .state('list', {
+        url: '/',
+        templateUrl: 'list.html',
+        controller: 'ListCtrl'
+      })
+      .state('view', {
+        url: '/review/:reviewid',
+        templateUrl: 'view.html',
+        controller: 'ViewCtrl'
+      })
+
+      $urlRouterProvider.otherwise("/");
+})
+
+
+
+
+// Service qui restransmet le json dans les deux controllers
+
+.factory('Reviews', function($http) {
+
+  var cachedData;
+
+    function getData(reviewData, callback) {
+
+      $http.get("http://www.giantbomb.com/api/reviews/?api_key=836e68b410df00e6d87b2cb43a5afb2a589026c0&format=json&limit=5").success(function(data){
+
+        cachedData = data.results;
+        callback(data.results);
+      });
+    }
+})
+
+
+// Controller qui liste dans la homepage les reviews
+
+.controller('ListCtrl', function($scope, $http) {
+  
+  $scope.myData = {};
   $scope.myData.doClick = function(item, event) {
 
     var responsePromise = $http.get("http://www.giantbomb.com/api/reviews/?api_key=836e68b410df00e6d87b2cb43a5afb2a589026c0&format=json&limit=5");
@@ -34,3 +74,16 @@ angular.module('starter', ['ionic'])
     });
   }
 })
+
+// Controller qui affiche le contenu de la review
+
+.controller('ViewCtrl', function($scope, $http, data) {
+
+  var url = data,
+    config = "?api_key=836e68b410df00e6d87b2cb43a5afb2a589026c0&format=json";
+
+    $http.get(url + config).success(function(data) {
+        $scope.review = data.results;
+    });
+})
+
