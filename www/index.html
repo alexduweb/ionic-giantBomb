@@ -42,6 +42,8 @@
                 {{x.deck}}
                 <br><br>
                 {{x.publish_date}}
+                <br><br>
+                Average vote: <strong>{{x.score}}/5</strong>
               </a>
             </div>
           </ion-list>
@@ -61,6 +63,11 @@
 
           <div class="item item-image">
             <h3>No photo</h3>
+          </div>
+
+          <div class="item item-body">
+            <h3>{{reviewId.deck}}</h3>
+            <p ng-bind-html="reviewId.description | unsafe"></p>
           </div>
 
           <a class="item" href="#">

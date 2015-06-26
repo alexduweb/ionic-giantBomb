@@ -49,7 +49,7 @@ angular.module('starter', ['ionic'])
 
       GetReview: function() {
 
-        return $http.jsonp("http://www.giantbomb.com/api/reviews/?api_key=836e68b410df00e6d87b2cb43a5afb2a589026c0&format=jsonp&limit=5&json_callback=JSON_CALLBACK").then(function(response) {
+        return $http.jsonp("http://www.giantbomb.com/api/reviews/?api_key=836e68b410df00e6d87b2cb43a5afb2a589026c0&format=jsonp&limit=10&json_callback=JSON_CALLBACK").then(function(response) {
 
           review = response.data.results;
           return response.data.results;
@@ -59,8 +59,6 @@ angular.module('starter', ['ionic'])
       GetOneReview: function(reviewId) {
           
         for(i=0; i<review.length; i++) {
-
-          console.log(review[i]);
 
           if(review[i].release.id == reviewId) {
 
@@ -93,4 +91,10 @@ angular.module('starter', ['ionic'])
       $scope.reviewId = ReviewService.GetOneReview(reviewId);
   }
 ])
+
+.filter('unsafe', function($sce) {
+  return function(val) {
+    return $sce.trustAsHtml(val);
+  };
+})
 
