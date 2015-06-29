@@ -34,6 +34,10 @@
   <script id="list.html" type="text/ng-template">
     <ion-view view-title="List of Reviews">
       <ion-content>
+          <ion-refresher 
+            pulling-text="Pull to refresh..."
+            on-refresh="doRefresh()">
+          </ion-refresher>
           <ion-list>
             <div class="list">
               <a ng-repeat="x in review" href="#/review/{{x.release.id}}" class="item item-thumbnail-left">
@@ -47,6 +51,11 @@
               </a>
             </div>
           </ion-list>
+          <ion-infinite-scroll
+            ng-if="!noMoreItemsAvailable"
+            immediate-check=true
+            on-infinite="loadMore()">
+          </ion-infinite-scroll>
       </ion-content>
     </ion-view>
   </script>
@@ -67,7 +76,7 @@
 
           <div class="item item-body">
             <h3>{{reviewId.deck}}</h3>
-            <p ng-bind-html="reviewId.description | unsafe"></p>
+            <p ng-bind-html="reviewId.description"></p>
           </div>
 
           <a class="item" href="#">

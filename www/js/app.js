@@ -43,29 +43,49 @@ angular.module('starter', ['ionic'])
 
 .factory('ReviewService', ['$http',function($http) {
   
-    var review = [];
+    var reviews = [];
+    var baseURL = "http://www.giantbomb.com/api/reviews/?api_key=836e68b410df00e6d87b2cb43a5afb2a589026c0&format=jsonp&sort=publish_date:desc";
+    var limit = "&limit=";
+    var config = "&json_callback=JSON_CALLBACK";
 
     return {
 
       GetReview: function() {
 
-        return $http.jsonp("http://www.giantbomb.com/api/reviews/?api_key=836e68b410df00e6d87b2cb43a5afb2a589026c0&format=jsonp&limit=10&json_callback=JSON_CALLBACK").then(function(response) {
+        reviews = [];
 
-          review = response.data.results;
-          return response.data.results;
+        return $http.jsonp(baseURL + limit+5 + config).then(function(response) {
+
+          for (i=0;i<response.data.results.length; i++) {
+
+            reviews.push((response.data.results)[i]);
+          }
+          return response;
         });
       },
 
       GetOneReview: function(reviewId) {
-          
-        for(i=0; i<review.length; i++) {
 
-          if(review[i].release.id == reviewId) {
+        for(i=0; i<reviews.length; i++) {
 
-              
-             return review[i];
+          if(reviews[i].release.id == reviewId) {
+
+              return reviews[i];
           }
         }
+      },
+
+      GetNewReviews: function(offset) {
+
+        return $http.jsonp(baseURL + limit+5 +"&offset="+ offset + config).then(function(response) {
+
+          for (i=0;i<response.data.results.length; i++) {
+
+            reviews.push((response.data.results)[i]);
+          }
+        
+          return response;
+        });
       }
     }
   }
@@ -76,9 +96,37 @@ angular.module('starter', ['ionic'])
 
 .controller('ListCtrl', ['$scope', 'ReviewService', function($scope, ReviewService) {
 
+    $scope.review = [];
+    var offset = 0;
+    $scope.noMoreItemsAvailable = false;
+
+    $scope.doRefresh = function() {
       ReviewService.GetReview().then(function(review) {
-          $scope.review = review;
+          $scope.review = review.data.results;
+      })
+      .finally(function () {
+        $scope.$broadcast('scroll.refreshComplete');
+        offset = 5;
       });
+    };
+
+    $scope.loadMore = function() {
+
+      var result = offset + 5;
+
+      ReviewService.GetNewReviews(offset).then(function(resp) {
+
+        if ($scope.review.length >= resp.data.number_of_total_results) {
+
+          $scope.noMoreItemsAvailable = true;
+        }
+
+        $scope.review = $scope.review.concat(resp.data.results);
+        $scope.$broadcast('scroll.infiniteScrollComplete');
+      });
+
+      offset = result;
+    }
   }
 ])
 
@@ -86,15 +134,9 @@ angular.module('starter', ['ionic'])
 
 .controller('ViewCtrl', ['$scope','$stateParams','ReviewService', function($scope, $stateParams, ReviewService) {
 
-
       var reviewId = $stateParams.reviewId;
       $scope.reviewId = ReviewService.GetOneReview(reviewId);
   }
 ])
 
-.filter('unsafe', function($sce) {
-  return function(val) {
-    return $sce.trustAsHtml(val);
-  };
-})
 
