@@ -32,6 +32,14 @@ angular.module('starter', ['ionic'])
         templateUrl: 'view.html',
         controller: 'ViewCtrl'
       })
+      .state('yoloOne', {
+        url: '/yoloOne',
+        templateUrl: 'yoloOne.html'
+      })
+      .state('yoloTwo', {
+        url: '/yoloTwo',
+        templateUrl: 'yoloTwo.html'
+      })
 
       $urlRouterProvider.otherwise("/");
 })
@@ -138,5 +146,12 @@ angular.module('starter', ['ionic'])
       $scope.reviewId = ReviewService.GetOneReview(reviewId);
   }
 ])
+
+.controller('NavCtrl', function($scope, $location) {
+
+  $scope.isActive = function (viewLocation) {
+    return viewLocation === $location.path();
+  };
+})
 
 

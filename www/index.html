@@ -31,9 +31,26 @@
 
   <ion-nav-view></ion-nav-view>
 
+  <div class="tabs-striped tabs-top tabs-background-positive tabs-color-light">
+    <div class="tabs" ng-controller="NavCtrl">
+      <a class="tab-item" ng-class="{ active: isActive('/')}" href="#/">
+        <i class="icon ion-home"></i>
+        Test
+      </a>
+      <a class="tab-item" ng-class="{ active: isActive('/yoloOne')}" href="#/yoloOne">
+        <i class="icon ion-star"></i>
+        Favorites
+      </a>
+      <a class="tab-item" ng-class="{ active: isActive('/yoloTwo')}" href="#/yoloTwo">
+        <i class="icon ion-gear-a"></i>
+        Settings
+      </a>
+    </div>
+  </div>
+
   <script id="list.html" type="text/ng-template">
     <ion-view view-title="List of Reviews">
-      <ion-content>
+      <ion-content class="has-tabs-top">
           <ion-refresher 
             pulling-text="Pull to refresh..."
             on-refresh="doRefresh()">
@@ -63,7 +80,7 @@
 
   <script id="view.html" type="text/ng-template">
     <ion-view view-title="Review Details">
-      <ion-content>
+      <ion-content class="has-tabs-top">
         <div class="list card">
           <div class="item item-avatar">
             <h2>{{reviewId.game.name}}</h2>
@@ -84,6 +101,22 @@
           </a>
       </ion-content>
     <ion-view>
+  </script>
+
+  <script id="yoloOne.html" type="text/ng-template">
+    <ion-view view-title="YoloOne">
+      <ion-content class="has-tabs-top">
+        <div><h1>YoloOne !</h1></div>
+      </ion-content>
+    </ion-view>
+  </script>
+
+  <script id="yoloTwo.html" type="text/ng-template">
+    <ion-view view-title="YoloTwo">
+      <ion-content class="has-tabs-top">
+        <div><h1>YoloTwo !</h1></div>
+      </ion-content>
+    </ion-view>
   </script>
 
   </body>
