@@ -66,32 +66,34 @@ angular.module('starter', ['ionic'])
 })
 
 
-// Service qui restransmet le json dans les deux controllers
+// Service qui retransmet le json dans les deux controllers
 
 .factory('ReviewService', ['$http',function($http) {
   
     var reviews = [];
     var baseURL = "http://www.giantbomb.com/api/reviews/?api_key=836e68b410df00e6d87b2cb43a5afb2a589026c0&format=jsonp&sort=publish_date:desc";
-    var limit = "&limit=";
-    var config = "&json_callback=JSON_CALLBACK";
+    var config = "&limit=5&json_callback=JSON_CALLBACK";
 
     return {
 
-      GetReview: function() {
+      GetReviews: function(offset, addMore) {
 
-        reviews = [];
+        return $http.jsonp(baseURL + "&offset="+offset + config).then(function(response) {
 
-        return $http.jsonp(baseURL + limit+5 + config).then(function(response) {
+          if (addMore == false) {
 
-          for (i=0;i<response.data.results.length; i++) {
-
-            reviews.push((response.data.results)[i]);
+            reviews = [];
           }
+
+          reviews = reviews.concat(response.data.results);
+          
           return response;
         });
       },
 
       GetOneReview: function(reviewId) {
+        
+        console.log(reviews);
 
         for(i=0; i<reviews.length; i++) {
 
@@ -100,19 +102,6 @@ angular.module('starter', ['ionic'])
               return reviews[i];
           }
         }
-      },
-
-      GetNewReviews: function(offset) {
-
-        return $http.jsonp(baseURL + limit+5 +"&offset="+ offset + config).then(function(response) {
-
-          for (i=0;i<response.data.results.length; i++) {
-
-            reviews.push((response.data.results)[i]);
-          }
-        
-          return response;
-        });
       }
     }
   }
@@ -128,7 +117,7 @@ angular.module('starter', ['ionic'])
     $scope.noMoreItemsAvailable = false;
 
     $scope.doRefresh = function() {
-      ReviewService.GetReview().then(function(review) {
+      ReviewService.GetReviews(0, false).then(function(review) {
           $scope.review = review.data.results;
       })
       .finally(function () {
@@ -141,7 +130,7 @@ angular.module('starter', ['ionic'])
 
       var result = offset + 5;
 
-      ReviewService.GetNewReviews(offset).then(function(resp) {
+      ReviewService.GetReviews(offset, true).then(function(resp) {
 
         if ($scope.review.length >= resp.data.number_of_total_results) {
 
