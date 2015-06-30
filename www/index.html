@@ -31,24 +31,26 @@
 
   <ion-nav-view></ion-nav-view>
 
-  <div class="tabs-striped tabs-top tabs-background-positive tabs-color-light">
-    <div class="tabs" ng-controller="NavCtrl">
-      <a class="tab-item" ng-class="{ active: isActive('/')}" href="#/">
-        <i class="icon ion-home"></i>
-        Test
-      </a>
-      <a class="tab-item" ng-class="{ active: isActive('/yoloOne')}" href="#/yoloOne">
-        <i class="icon ion-star"></i>
-        Favorites
-      </a>
-      <a class="tab-item" ng-class="{ active: isActive('/yoloTwo')}" href="#/yoloTwo">
-        <i class="icon ion-gear-a"></i>
-        Settings
-      </a>
-    </div>
-  </div>
+  <script id="templates/tabs.html" type="text/ng-template">
+    <ion-tabs class="tabs-striped tabs-top tabs-background-positive tabs-color-light">
 
-  <script id="list.html" type="text/ng-template">
+      <ion-tab title="Home" href="#/home/list">
+        <ion-nav-view name="tab-Home"></ion-nav-view>
+      </ion-tab>
+
+
+      <ion-tab title="YoloOne" href="#/home/yoloOne">
+        <ion-nav-view name="tab-YoloOne"></ion-nav-view>
+      </ion-tab>
+
+
+      <ion-tab title="YoloTwo" href="#/home/yoloTwo">
+        <ion-nav-view name="tab-YoloTwo"></ion-nav-view>
+      </ion-tab>
+    </ion-tabs>
+  </script>
+
+  <script id="templates/list.html" type="text/ng-template">
     <ion-view view-title="List of Reviews">
       <ion-content class="has-tabs-top">
           <ion-refresher 
@@ -57,7 +59,7 @@
           </ion-refresher>
           <ion-list>
             <div class="list">
-              <a ng-repeat="x in review" href="#/review/{{x.release.id}}" class="item item-thumbnail-left">
+              <a ng-repeat="x in review" href="#/home/review/{{x.release.id}}" class="item item-thumbnail-left">
                 {{x.game.name}}
                 <br><br>
                 {{x.deck}}
@@ -78,7 +80,7 @@
   </script>
 
 
-  <script id="view.html" type="text/ng-template">
+  <script id="templates/view.html" type="text/ng-template">
     <ion-view view-title="Review Details">
       <ion-content class="has-tabs-top">
         <div class="list card">
@@ -103,7 +105,7 @@
     <ion-view>
   </script>
 
-  <script id="yoloOne.html" type="text/ng-template">
+  <script id="templates/yoloOne.html" type="text/ng-template">
     <ion-view view-title="YoloOne">
       <ion-content class="has-tabs-top">
         <div><h1>YoloOne !</h1></div>
@@ -111,7 +113,7 @@
     </ion-view>
   </script>
 
-  <script id="yoloTwo.html" type="text/ng-template">
+  <script id="templates/yoloTwo.html" type="text/ng-template">
     <ion-view view-title="YoloTwo">
       <ion-content class="has-tabs-top">
         <div><h1>YoloTwo !</h1></div>

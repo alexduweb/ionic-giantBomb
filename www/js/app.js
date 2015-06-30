@@ -22,29 +22,48 @@ angular.module('starter', ['ionic'])
 .config(function($stateProvider, $urlRouterProvider) {
 
     $stateProvider
-      .state('list', {
-        url: '/',
-        templateUrl: 'list.html',
-        controller: 'ListCtrl'
+      .state('home', {
+        url: '/home',
+        abstract: true,
+        templateUrl: 'templates/tabs.html'
       })
-      .state('view', {
+      .state('home.list', {
+        url: '/list',
+        views: {
+          'tab-Home': {
+            templateUrl: 'templates/list.html',
+            controller: 'ListCtrl'
+          }
+        }
+      })
+      .state('home.view', {
         url: '/review/:reviewId',
-        templateUrl: 'view.html',
-        controller: 'ViewCtrl'
+        views: {
+          'tab-Home': {
+            templateUrl: 'templates/view.html',
+            controller: 'ViewCtrl'
+          }
+        }
       })
-      .state('yoloOne', {
+      .state('home.yoloOne', {
         url: '/yoloOne',
-        templateUrl: 'yoloOne.html'
+        views: {
+          'tab-YoloOne': {
+            templateUrl: 'templates/yoloOne.html'
+          }
+        }
       })
-      .state('yoloTwo', {
+      .state('home.yoloTwo', {
         url: '/yoloTwo',
-        templateUrl: 'yoloTwo.html'
+        views: {
+          'tab-YoloTwo': {
+            templateUrl: 'templates/yoloTwo.html'
+          }
+        }
       })
 
-      $urlRouterProvider.otherwise("/");
+    $urlRouterProvider.otherwise("/home/list");
 })
-
-
 
 
 // Service qui restransmet le json dans les deux controllers
