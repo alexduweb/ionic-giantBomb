@@ -86,20 +86,20 @@ angular.module('starter', ['ionic'])
           }
 
           reviews = reviews.concat(response.data.results);
-          
+          console.log(reviews);
+
           return response;
         });
       },
 
       GetOneReview: function(reviewId) {
         
-        console.log(reviews);
 
         for(i=0; i<reviews.length; i++) {
+    
+          if (reviews[i].release && reviews[i].release.id == reviewId) {
 
-          if(reviews[i].release.id == reviewId) {
-
-              return reviews[i];
+            return reviews[i];
           }
         }
       }
@@ -152,6 +152,7 @@ angular.module('starter', ['ionic'])
 
       var reviewId = $stateParams.reviewId;
       $scope.reviewId = ReviewService.GetOneReview(reviewId);
+
   }
 ])
 
